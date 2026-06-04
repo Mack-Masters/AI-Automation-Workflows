@@ -1,0 +1,162 @@
+{
+  "name": "New Hire Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "New Hire Onboarding",
+        "formDescription": "Submit information to complete onboarding",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "First Name ",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Last Name"
+            },
+            {
+              "fieldLabel": "Role",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Department",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Manager Email",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "204e156c-004b-49f7-993a-97350ef9c477",
+      "name": "On form submission",
+      "webhookId": "05b4d9a3-4be9-4c3b-85e0-f3b7210e6505",
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2708fb7b-ac9b-42aa-9a86-13c30e94dde5",
+              "name": "username",
+              "value": "{{ $json[\"First Name\"].toLowerCase() + \".\" + $json[\"Last Name\"].toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "f8752ab2-ff10-4082-afb9-98032bb0a8fc",
+              "name": "email",
+              "value": "{{ $json[\"First Name\"].toLowerCase() + \".\" + $json[\"Last Name\"].toLowerCase() + \"@company.com\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "52acb44e-b1c5-41f3-adcf-6a17f96b2af6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://webhook.example.com/onboarding",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Username",
+              "value": "{{ $json.username }}"
+            },
+            {
+              "name": "Email",
+              "value": "{{ $json.email }}"
+            },
+            {
+              "name": "Role",
+              "value": "Role"
+            },
+            {
+              "name": "Department",
+              "value": "Department"
+            },
+            {
+              "name": "First_Name",
+              "value": "First Name"
+            },
+            {
+              "name": "Last_Name",
+              "value": "Last Name"
+            },
+            {
+              "name": "Manager_email",
+              "value": "Manager Email"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c5e7ade5-1d9e-44dc-b561-77c2b1bd47ab",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b0ee6774-6e00-411a-933b-7239fb6d1db9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "96569498cab785ba0974d5eb599bfb3f7b7dd1f7d25ee1403ad94af1a0ab6ede"
+  },
+  "nodeGroups": [],
+  "id": "edHOo9Y1d7AfQqPe",
+  "tags": []
+}
